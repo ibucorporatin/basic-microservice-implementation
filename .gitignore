@@ -1,0 +1,6 @@
+
+service-1-posts/node_modules/
+service-2-comments/node_modules/
+event-bus/node_modules/
+query/node_modules/
+blog-client/node_modules/
