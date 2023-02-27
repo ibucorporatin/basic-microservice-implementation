@@ -29,6 +29,7 @@ app.post("/posts/:id/comments", async (req, res) => {
   comments.push({
     id: commentId,
     content,
+    status:"pending"
   });
   commentsByPostId[id] = comments;
   try {
@@ -38,6 +39,7 @@ app.post("/posts/:id/comments", async (req, res) => {
         postId: req.params.id,
         id: commentId,
         content,
+        status:"pending"
       },
     });
   } catch (error) {
@@ -45,10 +47,27 @@ app.post("/posts/:id/comments", async (req, res) => {
   }
   res.status(201).json(comments);
 });
-app.post("/events", (req, res) => {
-  console.log("receved event in comments", req.body.type);
+
+app.post("/events", async(req, res) => {
+
+  const {data,type}=req.body
+
+   if(type==="CommentM"){
+     const { id,status,postId,content }=data
+     const comments= commentsByPostId[postId]
+     
+     const comment=comments.find((c)=>{
+    return c.id===id
+     })
+     comment.status=status;
+     await axios.post("http://localhost:5000/events", {
+      type: "CommentU",
+      data:data
+    }).then(()=>console.log("ir")).catch(()=>console.log("errpr"))
+    }
   res.status(201).send({});
 });
+
 
 // Start the server
 app.listen(port, () => {

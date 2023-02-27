@@ -8,9 +8,19 @@ function CommentList({ id, comments }) {
       <h6>comments List</h6>
 
       <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
+        {comments.map((comment) => {
+          let content;
+          if(comment.status==="approved"){
+       content=comment.content
+          }
+          if(comment.status==="pending"){
+            content="this comment is awaiting moderate";
+               }
+               if(comment.status==="rejected"){
+                content="this comment has been rejected!!";
+                   }
+      return    <li key={comment.id}>{content}</li>
+})}
       </ul>
     </div>
   );
